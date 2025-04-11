@@ -8,7 +8,9 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
+    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-800: oklch(44.4% 0.177 26.899);
+    --color-green-500: oklch(72.3% 0.219 149.579);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
@@ -16,6 +18,8 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-md: 28rem;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
     --radius-xl: 0.75rem;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -244,6 +248,13 @@
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
+  .text-center {
+    text-align: center;
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
   .text-gray-300 {
     color: var(--color-gray-300);
   }
@@ -253,8 +264,14 @@
   .text-gray-500 {
     color: var(--color-gray-500);
   }
+  .text-green-500 {
+    color: var(--color-green-500);
+  }
   .text-red-50 {
     color: var(--color-red-50);
+  }
+  .text-red-500 {
+    color: var(--color-red-500);
   }
   .text-red-800 {
     color: var(--color-red-800);

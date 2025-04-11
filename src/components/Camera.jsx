@@ -1,14 +1,57 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const Camera = () => {
   const [photo, setPhoto] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleInput = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPhoto(URL.createObjectURL(file));
+      setPhoto(file);
+      setPreview(URL.createObjectURL(file));
     }
   };
+
+  const handleUpload = async (photo) => {
+    if (!photo) return;
+
+    const formData = new FormData();
+
+    try {
+      setUploading(true);
+      formData.append("photo", photo);
+
+      const res = await axios.post("https://localhost:8080/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setMessage(`Загрузка: ${percent}%`);
+        }, // TODO make uploading animation
+      });
+
+      setMessage("Файл успешно загружен!");
+      setSuccess(true);
+    } catch (error) {
+      console.error("Ошибка при загрузке:", error);
+      setMessage("Ошибка при загрузке файла");
+      setSuccess(false);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (photo) {
+      handleUpload(photo);
+    }
+  }, [photo]);
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-md rounded-xl w-full max-w-md mx-auto text-gray-500">
@@ -22,33 +65,49 @@ const Camera = () => {
       hover:border-blue-500
       hover:text-blue-500"
       >
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleInput}
-          className="hidden"
-        />
-        <span>Сделайте фото чека</span>
+        {preview && (
+          <img
+            src={preview}
+            alt="Captured"
+            className="w-full h-48 object-cover rounded-xl border"
+          />
+        )}
+
+        {!preview && (
+          <>
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleInput}
+              className="hidden"
+            />
+            <span>Сделайте фото чека</span>
+          </>
+        )}
       </label>
 
-      <div>
-        <button
-          tabIndex={0}
-          type="button"
-          className="hover:text-blue-500 duration-300 transition-colors cursor-pointer"
-          onClick={() => document.querySelector('input[type="file"]').click()}
-        >
-          <span>Или загрузите фото с устройства</span>
-        </button>
-      </div>
+      {!preview && (
+        <div>
+          <button
+            tabIndex={0}
+            type="button"
+            className="hover:text-blue-500 duration-300 transition-colors cursor-pointer"
+            onClick={() => document.querySelector('input[type="file"]').click()}
+          >
+            <span>Или загрузите фото с устройства</span>
+          </button>
+        </div>
+      )}
 
-      {photo && (
-        <img
-          src={photo}
-          alt="Captured"
-          className="w-full h-48 object-cover rounded-xl border"
-        />
+      {message && (
+        <p
+          className={
+            "text-sm text-center" + success ? "text-red-500" : "text-green-500"
+          }
+        >
+          {message}
+        </p>
       )}
     </div>
   );
