@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "tlwndcli": "npx @tailwindcss/cli -i ./src/index.css -o ./src/output.css --watch",
+    "tlwndcli": "npx @tailwindcss/cli -i ./src/css/index.css -o ./src/css/output.css --watch",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
@@ -19,6 +19,7 @@
     "gh-pages": "^6.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
     "react-router": "^7.5.0",
     "tailwindcss": "^4.1.3"
   },
