@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import CustomerProfile from "./CustomerProfile";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineEdit } from "react-icons/md";
+import CustomerProfile from "./CustomerProfile";
 
 const Card = ({
   product,

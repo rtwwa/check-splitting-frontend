@@ -10,7 +10,6 @@ createRoot(document.getElementById("root")).render(
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<InitialPage />} />
-
         <Route path="/check/:checkId" element={<FormedCheck />} />
       </Route>
     </Routes>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import fakeApi from "../api/fakeApi";
-import Card from "../components/Card/Card";
 import OrderAssignment from "../components/OrderAssignment";
 
 const test = {

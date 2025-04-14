@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Card from "./Card/Card";
 import fakeApi from "../api/fakeApi";
 import FinalCheck from "./Card/FinalCheck";
-
-const initialOrderData = await fakeApi.getCheck(1);
+import Card from "./card/Card";
 
 const generatePlaceholderCustomers = (count) => {
   const customers = [];
@@ -35,8 +33,10 @@ const OrderAssignment = () => {
   const [assignments, setAssignments] = useState({});
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
+      const initialOrderData = await fakeApi.getCheck(1);
+
       const customers = generatePlaceholderCustomers(
         initialOrderData.numberClients
       );
@@ -53,7 +53,7 @@ const OrderAssignment = () => {
       setError("Не удалось инициализировать данные");
       console.error(err);
     }
-  }, []); // Пустой массив зависимостей - выполняется один раз при монтировании
+  }, []);
 
   const handleCustomerToggle = (productIdentifier, customerId) => {
     setAssignments((prevAssignments) => {
