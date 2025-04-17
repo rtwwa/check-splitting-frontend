@@ -1,107 +1,104 @@
 import React, { useState, useEffect } from "react";
 import fakeApi from "../api/fakeApi";
-import FinalCheck from "./Card/FinalCheck";
+import CustomerManager from "../api/CustomerManager";
 import Card from "./card/Card";
-
-const generatePlaceholderCustomers = (count) => {
-  const customers = [];
-  if (count < 1) {
-    return customers;
-  }
-
-  customers.push({
-    id: `cust${0}`,
-    name: `Вы`,
-    avatar: `https://i.pravatar.cc/40?u=cust${0}`,
-  });
-
-  if (count > 1) {
-    for (let i = 1; i < count; i++) {
-      customers.push({
-        id: `cust${i}`,
-        name: `Клиент ${i + 1}`,
-        avatar: `https://i.pravatar.cc/40?u=cust${i}`,
-      });
-    }
-  }
-  return customers;
-};
+import FinalCheck from "./Card/FinalCheck";
 
 const OrderAssignment = () => {
   const [products, setProducts] = useState([]);
-  const [availableCustomers, setAvailableCustomers] = useState([]);
-  const [assignments, setAssignments] = useState({});
+  const [totalCustomersArray, setTotalCustomersArray] = useState([]);
+  const [positionsInfo, setPositionsInfo] = useState([]);
+  const [selectedCustomersPerPosition, setSelectedCustomersPerPosition] =
+    useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(async () => {
-    try {
-      const initialOrderData = await fakeApi.getCheck(1);
+  const [customerManager] = useState(() => new CustomerManager());
 
-      const customers = generatePlaceholderCustomers(
-        initialOrderData.numberClients
-      );
-      setAvailableCustomers(customers);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const initialOrderData = await fakeApi.getCheck(1);
+        setProducts(initialOrderData.products);
 
-      setProducts(initialOrderData.products);
+        const initialPositionInfo = {};
+        initialOrderData.products.forEach((product) => {
+          initialPositionInfo[product.name] = {
+            price: product.price,
+            count: product.numberServings,
+            clients: 0,
+            payingClients: 0,
+          };
+        });
 
-      const initialAssignments = {};
-      initialOrderData.products.forEach((product) => {
-        initialAssignments[product.name] = [];
-      });
-      setAssignments(initialAssignments);
-    } catch (err) {
-      setError("Не удалось инициализировать данные");
-      console.error(err);
+        const initialSelectedCustomersPerPosition = {};
+        initialOrderData.products.forEach((product) => {
+          initialSelectedCustomersPerPosition[product.name] = [];
+        });
+
+        setPositionsInfo(initialPositionInfo);
+
+        console.log(initialPositionInfo);
+      } catch (err) {
+        setError("Не удалось инициализировать данные");
+        console.error(err);
+      }
     }
+
+    fetchData();
   }, []);
 
   const handleCustomerToggle = (productIdentifier, customerId) => {
-    setAssignments((prevAssignments) => {
-      const currentAssigned = prevAssignments[productIdentifier] || [];
-      const isAssigned = currentAssigned.includes(customerId);
+    setSelectedCustomersPerPosition((prev) => {
+      const currentState = prev[productIdentifier] || [];
+      const isSelected = currentState.includes(customerId);
 
-      let updatedAssigned;
-      if (isAssigned) {
-        updatedAssigned = currentAssigned.filter((id) => id !== customerId);
+      let updatedState;
+      if (isSelected) {
+        updatedState = currentState.filter((id) => id !== customerId);
       } else {
-        updatedAssigned = [...currentAssigned, customerId];
+        updatedState = [...currentState, customerId];
       }
 
+      updatePositionInfoPayingCount(productIdentifier, updatedState.length);
+
       return {
-        ...prevAssignments,
-        [productIdentifier]: updatedAssigned,
+        ...prev,
+        [productIdentifier]: updatedState,
       };
     });
   };
 
-  const addCustomers = (customers, count) => {
-    const initialId = customers.length;
-    const newCustomers = [...customers];
-
-    for (let i = 0; i < count; i++) {
-      const id = initialId + i;
-      newCustomers.push({
-        id: `cust${id}`,
-        name: `Клиент ${id + 1}`,
-        avatar: `https://i.pravatar.cc/40?u=cust${id}`,
-      });
-    }
-
-    console.log(newCustomers);
-
-    setAvailableCustomers(newCustomers);
+  const handleAddCustomers = (toAdd) => {
+    customerManager.addCustomers(toAdd);
+    setTotalCustomersArray(customerManager.getCustomers());
   };
 
-  const finalCheckData = products.map((idx, product) => ({
-    position: product.name,
-    n: availableCustomers.length,
-    m: assignments[product.name]?.length || 0,
-  }));
+  const updatePositionInfoCount = (positionName, newCount) => {
+    setPositionsInfo((prevPositionInfo) => {
+      return {
+        ...prevPositionInfo,
+        [positionName]: {
+          ...prevPositionInfo[positionName],
+          clients: newCount,
+        },
+      };
+    });
+  };
+
+  const updatePositionInfoPayingCount = (positionName, newPaying) => {
+    setPositionsInfo((prevPositionInfo) => {
+      return {
+        ...prevPositionInfo,
+        [positionName]: {
+          ...prevPositionInfo[positionName],
+          payingClients: newPaying,
+        },
+      };
+    });
+  };
 
   return (
     <div className="p-4 mx-auto w-fit max-w-2xl">
-      {" "}
-      {/* Ограничим ширину для лучшего вида */}
       <h1 className="text-2xl font-bold mb-4 text-center">
         Распределение позиций заказа
       </h1>
@@ -114,23 +111,21 @@ const OrderAssignment = () => {
             <Card
               key={product.name}
               product={product}
-              availableCustomers={availableCustomers}
-              assignedCustomerIds={assignments[product.name] || []}
-              addPlaceholderCustomers={addCustomers}
+              totalCustomersArray={totalCustomersArray}
+              countOfClients={positionsInfo[product.name].clients}
+              selectedCustomers={
+                selectedCustomersPerPosition[product.name] || []
+              }
+              addCustomers={handleAddCustomers}
               onCustomerToggle={handleCustomerToggle}
+              updatePositionInfoCount={updatePositionInfoCount}
             />
           );
         })}
       </div>
       <div className="mt-6 text-lg font-semibold">
-        <FinalCheck check={finalCheckData} />
+        <FinalCheck positionsInfo={positionsInfo} />
       </div>
-      <h3 className="mt-6 text-lg font-semibold">
-        Текущее распределение (для отладки):
-      </h3>
-      <pre className="mt-2 p-3 bg-gray-100 rounded text-sm overflow-x-auto">
-        {JSON.stringify(assignments, null, 2)}
-      </pre>
     </div>
   );
 };

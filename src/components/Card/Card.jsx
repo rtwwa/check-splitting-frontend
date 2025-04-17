@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineEdit } from "react-icons/md";
 import CustomerProfile from "./CustomerProfile";
 
 const Card = ({
   product,
-  availableCustomers,
-  assignedCustomerIds,
+  totalCustomersArray,
+  selectedCustomers,
+  addCustomers,
   onCustomerToggle,
-  addPlaceholderCustomers,
+  updatePositionInfoCount,
 }) => {
-  // n => userCount m => assignedCustomersIds.lenght
   const [userCount, setUserCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [manualInput, setManualInput] = useState(1);
@@ -33,10 +33,10 @@ const Card = ({
   };
 
   const pricePerPerson =
-    assignedCustomerIds.length > 0
+    selectedCustomers.length > 0
       ? product.price *
         product.numberServings *
-        (assignedCustomerIds.length / userCount)
+        (selectedCustomers.length / userCount)
       : product.price * product.numberServings;
 
   const handleSave = () => {
@@ -44,17 +44,18 @@ const Card = ({
 
     if ((!isNaN(num) && num < 1) || num > 128) return;
 
-    if (availableCustomers.length < num) {
-      const toAdd = num - availableCustomers.length;
-      addPlaceholderCustomers(availableCustomers, toAdd);
+    if (totalCustomersArray.length < num) {
+      const toAdd = num - totalCustomersArray.length;
+      console.log(toAdd);
+      addCustomers(toAdd);
     }
 
+    updatePositionInfoCount(product.name, num);
     setUserCount(num);
     setIsModalOpen(false);
   };
 
   return (
-    // Отрисовка самой карточки
     <div
       className="max-w-xl my-1 p-4 rounded-md border-gray-200 border-2 flex flex-col gap-3"
       onClick={() => {
@@ -95,12 +96,14 @@ const Card = ({
         <div>
           <p className="text-sm text-gray-600 mb-2">Кто заказывал:</p>
           <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
-            {availableCustomers.slice(0, userCount).map((customer) => (
+            {totalCustomersArray.slice(0, userCount).map((customer) => (
               <CustomerProfile
                 key={customer.id}
                 customer={customer}
-                isSelected={assignedCustomerIds.includes(customer.id)}
-                onClick={() => onCustomerToggle(product.name, customer.id)}
+                isSelected={selectedCustomers.includes(customer.id)}
+                onClick={() =>
+                  onCustomerToggle(product.name, customer.id, userCount)
+                }
               />
             ))}
           </div>
@@ -158,7 +161,7 @@ const Card = ({
       )}
 
       {/* Отображение цены на человека */}
-      {assignedCustomerIds.length > 0 && (
+      {selectedCustomers.length > 0 && (
         <div className="flex items-center gap-2 text-sm text-gray-700 mt-2">
           <IoPricetagsOutline />
           <span>

@@ -46,7 +46,7 @@ const fakeApi = {
             name: "Garlic Bread",
             numberServings: 4,
             price: 160,
-            total: 160,
+            total: 640,
           },
           {
             name: "Minestrone Soup",
@@ -76,9 +76,9 @@ const fakeApi = {
     if (count > 0) {
       for (let i = 1; i <= count; i++) {
         customers.push({
-          id: `cust${i}`, // Уникальный ID
-          name: `Клиент ${i}`, // Простое имя
-          avatar: `https://dummyimage.com/64x64/000/fff&text=$`, // Ссылка на аватар-заглушку
+          id: `cust${i}`,
+          name: `Клиент ${i}`,
+          avatar: `https://dummyimage.com/64x64/000/fff&text=$`,
         });
       }
     }
