@@ -27,7 +27,7 @@ const Camera = () => {
       setUploading(true);
       // formData.append("photo", photo);
 
-      // const res = await axios.post("https://localhost:8080/get-image", formData, {
+      // const res = await axios.post("https://localhost:8080/load-image", formData, {
       //   headers: {
       //     "Content-Type": "multipart/form-data",
       //   },

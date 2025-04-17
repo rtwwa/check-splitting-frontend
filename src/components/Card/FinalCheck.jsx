@@ -72,11 +72,14 @@ const FinalCheck = ({ positionsInfo }) => {
                   window.location.href =
                     "https://www.sberbank.com/sms/pbpn?requisiteNumber=your_num_here";
                 }}
+                className="hover:cursor-pointer hover:text-green-600 transition-colors duration-150"
               >
                 Перевести через СБП
               </button>
 
-              <button>Оплатить улыбкой</button>
+              <button className="hover:cursor-pointer hover:text-green-600 transition-colors duration-150">
+                Оплатить улыбкой
+              </button>
             </div>
           </>
         )}
