@@ -46,7 +46,7 @@ const Camera = () => {
         )
         .then((res) => {
           const checkHash = res.data.hash;
-          const shareUrl = `http://localhost:5173/check-splitting-frontend/check/${checkHash}`;
+          const shareUrl = `http://localhost:5173/check/${checkHash}`;
           setShareUrl(shareUrl);
         });
 

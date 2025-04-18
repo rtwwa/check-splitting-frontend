@@ -25,12 +25,12 @@ COPY . ./
 EXPOSE 5173
 CMD ["npm", "run", "dev"]
 
-# Stage 3: Production environment
-FROM nginx:alpine AS production
+# # Stage 3: Production environment
+# FROM nginx:alpine AS production
 
-# Copy the production build artifacts from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# # Copy the production build artifacts from the build stage
+# COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose the default NGINX port
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# # Expose the default NGINX port
+# EXPOSE 80
+# CMD ["nginx", "-g", "daemon off;"]

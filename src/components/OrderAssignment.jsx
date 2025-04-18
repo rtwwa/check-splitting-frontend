@@ -20,7 +20,7 @@ const OrderAssignment = ({ checkHash }) => {
   const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
 
   const url = `http://localhost:8090/small-router/${checkHash}`;
-  const shareUrl = `http://localhost:5173/check-splitting-frontend/check/${checkHash}`;
+  const shareUrl = `http://localhost:5173/check/${checkHash}`;
 
   useEffect(() => {
     async function fetchData() {

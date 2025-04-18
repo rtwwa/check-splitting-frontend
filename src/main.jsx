@@ -6,7 +6,7 @@ import FormedCheckPage from "./pages/FormedCheck.jsx";
 import MainLayout from "./layout/MainLayout.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/check-splitting-frontend">
+  <BrowserRouter>
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<InitialPage />} />
