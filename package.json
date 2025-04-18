@@ -5,7 +5,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port=5173",
     "build": "vite build",
     "tlwndcli": "npx @tailwindcss/cli -i ./src/css/index.css -o ./src/css/output.css --watch",
     "predeploy": "npm run build",

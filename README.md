@@ -1,12 +1,21 @@
-# React + Vite
+# 🧾 Check-Splitting Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Это фронтенд-приложение для управления процессом разделения счёта между клиентами. Проект реализован с использованием **React.js** и современных инструментов разработки интерфейсов.
 
-Currently, two official plugins are available:
+## 🚀 Используемые технологии
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React.js** — библиотека для построения пользовательского интерфейса
+- **Tailwind CSS** — утилитарный CSS-фреймворк для быстрой стилизации
+- **Axios** — библиотека для выполнения HTTP-запросов
+- **React Router** — для маршрутизации между страницами
+- **React Icons** — коллекция иконок для React
 
-## Expanding the ESLint configuration
+## 📦 Установка и запуск
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Установка зависимостей
+npm install
+
+# Запуск проекта
+npm run dev
+```
