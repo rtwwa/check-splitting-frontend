@@ -30,7 +30,12 @@ const OrderAssignment = ({ checkHash }) => {
         const initialOrderData = res.data.client;
         const phoneNumber = res.data.client.numberPhone;
 
-        setPhone(phoneNumber);
+        console.log(phoneNumber);
+
+        if (phoneNumber !== undefined) {
+          setPhone(phoneNumber);
+        }
+
         setProducts(initialOrderData.products);
 
         const initialPositionInfo = {};
@@ -49,8 +54,6 @@ const OrderAssignment = ({ checkHash }) => {
         });
 
         setPositionsInfo(initialPositionInfo);
-
-        console.log(initialPositionInfo);
       } catch (err) {
         setError("Не удалось инициализировать данные");
         console.error(err);

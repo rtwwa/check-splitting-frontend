@@ -177,25 +177,27 @@ const FinalCheck = ({ positionsInfo, phoneNumber }) => {
               </span>
             </div>
 
-            <div className="flex flex-col items-end gap-2 text-sm">
-              <button
-                type="button"
-                onClick={() => {
-                  window.location.href = `https://www.sberbank.com/sms/pbpn?requisiteNumber=${phoneNumber}`;
-                }}
-                className="text-gray-600 hover:text-green-600 hover:cursor-pointer transition-colors duration-150"
-              >
-                Перевести через СБП
-              </button>
+            {phoneNumber !== "undefined" && (
+              <div className="flex flex-col items-end gap-2 text-sm">
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.location.href = `https://www.sberbank.com/sms/pbpn?requisiteNumber=${phoneNumber}`;
+                  }}
+                  className="text-gray-600 hover:text-green-600 hover:cursor-pointer transition-colors duration-150"
+                >
+                  Перевести через СБП
+                </button>
 
-              <button
-                type="button"
-                onClick={() => alert("Оплата улыбкой пока в разработке!")}
-                className="text-gray-600 hover:text-green-600 hover:cursor-pointer transition-colors duration-150"
-              >
-                Оплатить улыбкой
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => alert("Оплата улыбкой пока в разработке!")}
+                  className="text-gray-600 hover:text-green-600 hover:cursor-pointer transition-colors duration-150"
+                >
+                  Оплатить улыбкой
+                </button>
+              </div>
+            )}
           </div>
         </>
       ) : (

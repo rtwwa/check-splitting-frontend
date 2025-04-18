@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PhonePrompt from "./PhonePrompt";
-import ShareButton from "./ShareButton";
 import ShareUrl from "./ShareUrl";
 
 const Camera = () => {
@@ -63,7 +62,7 @@ const Camera = () => {
 
   const handlePhoneComplete = (result) => {
     if (result === "skipped") {
-      return;
+      handleUpload(photo);
     } else {
       handleUpload(photo, result);
     }
