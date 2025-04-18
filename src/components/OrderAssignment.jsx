@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import fakeApi from "../api/fakeApi";
 import CustomerManager from "../api/CustomerManager";
-import Card from "./card/Card";
-import FinalCheck from "./Card/FinalCheck";
+import Card from "./Card";
+import FinalCheck from "./FinalCheck";
 
 const OrderAssignment = () => {
   const [products, setProducts] = useState([]);

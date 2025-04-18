@@ -43,14 +43,14 @@ const PhonePrompt = ({ onComplete }) => {
       <div className="flex gap-2 w-full">
         <button
           onClick={handleSend}
-          className="flex-1 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          className="flex-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition hover:cursor-pointer"
         >
           Отправить номер
         </button>
 
         <button
           onClick={handleSkip}
-          className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition"
+          className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition hover:cursor-pointer"
         >
           Пропустить
         </button>

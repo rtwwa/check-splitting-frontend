@@ -11,11 +11,8 @@ const test = {
 };
 
 const FormedCheck = () => {
-  const { checkId } = useParams();
-  const [check, setCheck] = useState(null);
-
   return (
-    <div className="">
+    <div>
       <OrderAssignment />
     </div>
   );

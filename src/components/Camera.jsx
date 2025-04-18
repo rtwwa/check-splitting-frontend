@@ -25,19 +25,33 @@ const Camera = () => {
 
     try {
       setUploading(true);
-      // formData.append("photo", photo);
+      formData.append("file", photo);
 
-      // const res = await axios.post("https://localhost:8080/load-image", formData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      //   onUploadProgress: (progressEvent) => {
-      //     const percent = Math.round(
-      //       (progressEvent.loaded * 100) / progressEvent.total
-      //     );
-      //     setMessage(`Загрузка: ${percent}%`);
-      //   },
-      // });
+      const res = await axios
+        .post(
+          `http://localhost:8080/images/load-image?name=${Date.now()}`,
+          formData,
+          {
+            headers: {
+              accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: (progressEvent) => {
+              const percent = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setMessage(`Загрузка: ${percent}%`);
+            },
+          }
+        )
+        .then((res) => {
+          const data = async () => {
+            return await axios.get(res.data);
+          };
+          data().then((result) => {
+            console.log(result);
+          });
+        });
 
       setMessage("Файл успешно загружен!");
       setSuccess(true);

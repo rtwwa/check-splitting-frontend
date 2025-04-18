@@ -15,12 +15,13 @@ const Card = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [manualInput, setManualInput] = useState(1);
 
-  const selectedTextStyle = userCount === 0 ? { color: "green" } : {};
+  const selectedTextStyle =
+    userCount === 0 ? { color: "green", pointer: "cursor" } : {};
 
   const [clicked, setClicked] = useState({ plus: false, minus: false });
 
   const handleClick = (type) => {
-    if (type === "minus" && manualInput > 1) {
+    if (type === "minus" && manualInput > 0) {
       setManualInput(manualInput - 1);
       setClicked({ ...clicked, minus: true });
       setTimeout(() => setClicked({ ...clicked, minus: false }), 200);
@@ -30,6 +31,10 @@ const Card = ({
       setClicked({ ...clicked, plus: true });
       setTimeout(() => setClicked({ ...clicked, plus: false }), 200);
     }
+  };
+
+  const handleEditClick = () => {
+    if (userCount > 0) setIsModalOpen(true);
   };
 
   const pricePerPerson =
@@ -42,11 +47,10 @@ const Card = ({
   const handleSave = () => {
     const num = parseInt(manualInput, 10);
 
-    if ((!isNaN(num) && num < 1) || num > 128) return;
+    if ((!isNaN(num) && num < 0) || num > 128) return;
 
     if (totalCustomersArray.length < num) {
       const toAdd = num - totalCustomersArray.length;
-      console.log(toAdd);
       addCustomers(toAdd);
     }
 
@@ -70,13 +74,12 @@ const Card = ({
       >
         <h3 className="font-semibold flex gap-1">
           {product.name}
-          <span
-            onClick={() => {
-              if (userCount > 0) setIsModalOpen(true);
-            }}
-          >
+          <span>
             {userCount > 0 && (
-              <MdOutlineEdit className="hover:cursor-pointer text-md" />
+              <MdOutlineEdit
+                onClick={handleEditClick}
+                className="hover:cursor-pointer hover:text-green-600 transition-colors duration-150 text-md"
+              />
             )}
           </span>
         </h3>
