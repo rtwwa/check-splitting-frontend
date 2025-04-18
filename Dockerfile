@@ -1,36 +1,32 @@
-# Stage 1: Build the React app
-FROM node:slim AS build
+# Dockerfile
+
+# Step 1: Use a Node.js image to build the app
+FROM node:22 as builder
+
+# Set working directory inside the container
 WORKDIR /app
 
-# Leverage caching by installing dependencies first
-COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Copy the rest of the application code and build for production
-COPY . ./
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the app’s source code
+COPY . .
+
+# Build the app
 RUN npm run build
 
-# Stage 2: Development environment
-FROM node:slim AS development
-WORKDIR /app
 
-# Install dependencies again for development
-COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
+# Step 2: Use an Nginx image to serve the static files
+FROM nginx:alpine
 
-# Copy the full source code
-COPY . ./
+# Copy the build files from the builder stage to the Nginx web directory
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port for the development server
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+# Expose port 80
+EXPOSE 80
 
-# # Stage 3: Production environment
-# FROM nginx:alpine AS production
-
-# # Copy the production build artifacts from the build stage
-# COPY --from=build /app/dist /usr/share/nginx/html
-
-# # Expose the default NGINX port
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
