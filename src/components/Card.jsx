@@ -131,6 +131,7 @@ const Card = ({
               </div>
               <input
                 type="number"
+                inputMode="decimal"
                 autoFocus
                 value={manualInput}
                 onChange={(e) => setManualInput(e.target.value)}
