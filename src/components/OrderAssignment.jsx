@@ -12,6 +12,7 @@ const OrderAssignment = ({ checkHash }) => {
   const [positionsInfo, setPositionsInfo] = useState([]);
   const [selectedCustomersPerPosition, setSelectedCustomersPerPosition] =
     useState([]);
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
 
   const [customerManager] = useState(() => new CustomerManager());
@@ -27,9 +28,9 @@ const OrderAssignment = ({ checkHash }) => {
         const res = await axios.get(url);
 
         const initialOrderData = res.data.client;
+        const phoneNumber = res.data.client.numberPhone;
 
-        console.log(initialOrderData);
-
+        setPhone(phoneNumber);
         setProducts(initialOrderData.products);
 
         const initialPositionInfo = {};
@@ -169,7 +170,7 @@ const OrderAssignment = ({ checkHash }) => {
       </div>
 
       <div className="mt-2 text-lg font-semibold">
-        <FinalCheck positionsInfo={positionsInfo} />
+        <FinalCheck positionsInfo={positionsInfo} phoneNumber={phone} />
       </div>
 
       <SplitEquallyModal

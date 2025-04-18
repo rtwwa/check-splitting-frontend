@@ -7,7 +7,7 @@ const currencyFormatter = new Intl.NumberFormat("ru-RU", {
   maximumFractionDigits: 2,
 });
 
-const FinalCheck = ({ positionsInfo }) => {
+const FinalCheck = ({ positionsInfo, phoneNumber }) => {
   const [tipPercent, setTipPercent] = useState(0);
   const [customTipInput, setCustomTipInput] = useState("");
 
@@ -181,7 +181,6 @@ const FinalCheck = ({ positionsInfo }) => {
               <button
                 type="button"
                 onClick={() => {
-                  const phoneNumber = "your_num_here";
                   window.location.href = `https://www.sberbank.com/sms/pbpn?requisiteNumber=${phoneNumber}`;
                 }}
                 className="text-gray-600 hover:text-green-600 hover:cursor-pointer transition-colors duration-150"
