@@ -9,7 +9,7 @@ const CustomerProfile = ({ customer, isSelected, onClick }) => {
 
   return (
     <div
-      className="flex flex-col items-center text-center cursor-pointer"
+      className="flex flex-col items-center text-center cursor-pointer select-none"
       onClick={() => onClick(customer.id)}
     >
       <img

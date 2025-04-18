@@ -122,7 +122,7 @@ const Card = ({
             </h2>
             <div className="flex justify-center gap-6">
               <div
-                className={`text-4xl text-green-600 cursor-pointer transition-transform ${
+                className={`text-4xl text-green-600 cursor-pointer transition-transform select-none ${
                   clicked.minus ? "animate-click-scale" : ""
                 }`}
                 onClick={() => handleClick("minus")}
@@ -138,7 +138,7 @@ const Card = ({
                 className="w-[50%] text-2xl text-center border-b-2 border-gray-400 focus:outline-none mb-6"
               />
               <div
-                className={`text-4xl text-green-600 cursor-pointer transition-transform ${
+                className={`text-4xl text-green-600 cursor-pointer transition-transform select-none ${
                   clicked.plus ? "animate-click-scale" : ""
                 }`}
                 onClick={() => handleClick("plus")}

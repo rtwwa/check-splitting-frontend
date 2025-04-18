@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import PhonePrompt from "./PhonePrompt";
+import ShareButton from "./ShareButton";
+import ShareUrl from "./ShareUrl";
 
 const Camera = () => {
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [showPhonePrompt, setShowPhonePrompt] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+  const [showPhonePrompt, setShowPhonePrompt] = useState(true);
 
   const handleInput = (e) => {
     const file = e.target.files[0];
@@ -18,18 +20,17 @@ const Camera = () => {
     }
   };
 
-  const handleUpload = async (photo) => {
+  const handleUpload = async (photo, phone) => {
     if (!photo) return;
 
     const formData = new FormData();
 
     try {
-      setUploading(true);
       formData.append("file", photo);
 
       const res = await axios
         .post(
-          `http://localhost:8080/images/load-image?name=${Date.now()}`,
+          `http://localhost:8080/images/load-image?numberPhone=${phone}`,
           formData,
           {
             headers: {
@@ -45,12 +46,9 @@ const Camera = () => {
           }
         )
         .then((res) => {
-          const data = async () => {
-            return await axios.get(res.data);
-          };
-          data().then((result) => {
-            console.log(result);
-          });
+          const checkHash = res.data.hash;
+          const shareUrl = `http://localhost:5173/check-splitting-frontend/check/${checkHash}`;
+          setShareUrl(shareUrl);
         });
 
       setMessage("Файл успешно загружен!");
@@ -60,16 +58,16 @@ const Camera = () => {
       console.error("Ошибка при загрузке:", error);
       setMessage("Ошибка при загрузке файла");
       setSuccess(false);
-    } finally {
-      setUploading(false);
     }
   };
 
-  useEffect(() => {
-    if (photo) {
-      handleUpload(photo);
+  const handlePhoneComplete = (result) => {
+    if (result === "skipped") {
+      return;
+    } else {
+      handleUpload(photo, result);
     }
-  }, [photo]);
+  };
 
   return (
     <div className="flex flex-col items-center gap-4 p-4 bg-white shadow-md rounded-xl w-full max-w-md mx-auto text-gray-500">
@@ -114,7 +112,9 @@ const Camera = () => {
         </p>
       )}
 
-      {showPhonePrompt && <PhonePrompt onSuccess={() => {}} />}
+      {showPhonePrompt && <PhonePrompt onComplete={handlePhoneComplete} />}
+
+      {shareUrl !== "" && <ShareUrl url={shareUrl} />}
     </div>
   );
 };

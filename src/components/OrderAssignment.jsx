@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import fakeApi from "../api/fakeApi";
 import CustomerManager from "../api/CustomerManager";
 import Card from "./Card";
 import FinalCheck from "./FinalCheck";
+import SplitEquallyModal from "./SplitEqualModal";
+import axios from "axios";
+import ShareButton from "./ShareButton";
 
-const OrderAssignment = () => {
+const OrderAssignment = ({ checkHash }) => {
   const [products, setProducts] = useState([]);
   const [totalCustomersArray, setTotalCustomersArray] = useState([]);
   const [positionsInfo, setPositionsInfo] = useState([]);
@@ -14,10 +16,20 @@ const OrderAssignment = () => {
 
   const [customerManager] = useState(() => new CustomerManager());
 
+  const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
+
+  const url = `http://localhost:8090/small-router/${checkHash}`;
+  const shareUrl = `http://localhost:5173/check-splitting-frontend/check/${checkHash}`;
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const initialOrderData = await fakeApi.getCheck(1);
+        const res = await axios.get(url);
+
+        const initialOrderData = res.data.client;
+
+        console.log(initialOrderData);
+
         setProducts(initialOrderData.products);
 
         const initialPositionInfo = {};
@@ -97,6 +109,28 @@ const OrderAssignment = () => {
     });
   };
 
+  const handleApplyEqualSplit = (total, paying) => {
+    setPositionsInfo((prevInfo) => {
+      const updatedInfo = { ...prevInfo };
+      Object.keys(updatedInfo).forEach((positionKey) => {
+        updatedInfo[positionKey] = {
+          ...updatedInfo[positionKey],
+          clients: total,
+          payingClients: paying,
+        };
+      });
+      return updatedInfo;
+    });
+
+    const clearedSelections = {};
+    Object.keys(positionsInfo).forEach((positionKey) => {
+      clearedSelections[positionKey] = [];
+    });
+    setSelectedCustomersPerPosition(clearedSelections);
+
+    setIsSplitModalOpen(false);
+  };
+
   return (
     <div className="p-4 mx-auto w-fit max-w-2xl">
       <h1 className="text-2xl font-bold mb-4 text-center">
@@ -123,9 +157,28 @@ const OrderAssignment = () => {
           );
         })}
       </div>
-      <div className="mt-6 text-lg font-semibold">
+
+      <div className="mb-2 text-center">
+        <button
+          onClick={() => setIsSplitModalOpen(true)}
+          className="mt-2 p-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition-colors disabled:opacity-50"
+          disabled={products.length === 0}
+        >
+          Поделить все поровну
+        </button>
+      </div>
+
+      <div className="mt-2 text-lg font-semibold">
         <FinalCheck positionsInfo={positionsInfo} />
       </div>
+
+      <SplitEquallyModal
+        isOpen={isSplitModalOpen}
+        onClose={() => setIsSplitModalOpen(false)}
+        onSubmit={handleApplyEqualSplit}
+      />
+
+      <ShareButton url={shareUrl} />
     </div>
   );
 };

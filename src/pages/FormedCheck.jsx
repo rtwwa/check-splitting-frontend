@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import fakeApi from "../api/fakeApi";
+import React from "react";
 import OrderAssignment from "../components/OrderAssignment";
+import { useParams } from "react-router";
 
-const test = {
-  name: "Pizza Margherita",
-  numberServings: 2,
-  price: 450,
-  total: 900,
-};
+const FormedCheckPage = () => {
+  const { checkHash } = useParams();
 
-const FormedCheck = () => {
   return (
     <div>
-      <OrderAssignment />
+      <OrderAssignment checkHash={checkHash} />
     </div>
   );
 };
 
-export default FormedCheck;
+export default FormedCheckPage;

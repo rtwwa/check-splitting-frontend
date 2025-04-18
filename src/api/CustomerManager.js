@@ -6,12 +6,11 @@ class CustomerManager {
   }
 
   generateCustomer() {
-    console.log(this.nextId);
-
+    const avatarIndex = this.nextId % 19;
     const customer = {
       id: `cust${this.nextId}`,
       name: this.nextId === 0 ? `Вы` : `Клиент ${this.nextId + 1}`,
-      avatar: `https://i.pravatar.cc/${this.avatarSize}?u=cust${this.nextId}`,
+      avatar: `/static/avatars/${avatarIndex + 1}.jpg`,
     };
     this.nextId++;
     return customer;

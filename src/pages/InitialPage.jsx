@@ -6,7 +6,6 @@ const InitialPage = () => {
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       <Camera />
-      <Link to="/check/123">TestPage</Link>
     </div>
   );
 };

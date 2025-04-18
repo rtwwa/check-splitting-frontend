@@ -11,13 +11,8 @@ const PhonePrompt = ({ onComplete }) => {
       return;
     }
 
-    try {
-      await axios.post("https://localhost:8080/send-phone", { phone });
-      onComplete?.("sent");
-    } catch (err) {
-      console.error("Ошибка при отправке номера:", err);
-      setError("Не удалось отправить номер. Попробуйте позже.");
-    }
+    setError("");
+    onComplete?.(phone);
   };
 
   const handleSkip = () => {
@@ -45,14 +40,14 @@ const PhonePrompt = ({ onComplete }) => {
           onClick={handleSend}
           className="flex-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition hover:cursor-pointer"
         >
-          Отправить номер
+          Отправить с номером телефона
         </button>
 
         <button
           onClick={handleSkip}
           className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition hover:cursor-pointer"
         >
-          Пропустить
+          Отправить без номера телефона
         </button>
       </div>
     </div>
